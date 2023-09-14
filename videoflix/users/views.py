@@ -38,3 +38,11 @@ class LogoutViewset(APIView):
                 return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+#get Userdata from currUser
+class UserdataViewset(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.pk)  
