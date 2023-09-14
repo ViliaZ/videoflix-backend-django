@@ -7,6 +7,7 @@ from .serializers import UserSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import RetrieveUpdateAPIView
 
 
 class RegisterViewset(viewsets.ModelViewSet):
@@ -40,9 +41,11 @@ class LogoutViewset(APIView):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 #get Userdata from currUser
-class UserdataViewset(viewsets.ModelViewSet):
+class UserdataViewset(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.pk)  
+    def get_object(self):
+        return self.request.user
+    
+   

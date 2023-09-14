@@ -12,6 +12,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('login/', LoginViewset.as_view(), name='login'),
     path('logout/', LogoutViewset.as_view(), name='logout'),
-    path('userdetails/', UserdataViewset.as_view({'get': 'list'}), name='userdetails'),
+    path('userdetails/', UserdataViewset.as_view(), name='userdetails'),
     path('admin/', admin.site.urls)
 ]
