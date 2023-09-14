@@ -1,10 +1,12 @@
 
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
 
 
 class RegisterViewset(viewsets.ModelViewSet):
@@ -24,3 +26,15 @@ class LoginViewset(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+
+class LogoutViewset(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        try:
+            if request.user.is_authenticated:
+                request.user.auth_token.delete()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
