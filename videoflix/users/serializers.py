@@ -21,4 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
         if existing_user:
             raise serializers.ValidationError('Ein Nutzer existiert bereits mit dieser Email.')
 
-        return User.objects.create(**validated_data)
+        user = User.objects.create(**validated_data)
+        user.set_password(validated_data['password']) #set pw with hashing algorithm
+        user.save()
+        return user
