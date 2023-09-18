@@ -9,7 +9,7 @@ db.sqlite3
 media
 
 # Media files (movies)  # 
-/videoflix/assets/mov
+/media
 
 # Backup files # 
 *.bak 
