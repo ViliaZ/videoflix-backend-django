@@ -4,6 +4,8 @@ from django.urls import path, include
 from rest_framework import routers
 from users.views import RegisterViewset
 from users.views import LoginViewset, LogoutViewset, UserdataViewset
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 router.register(r'register', RegisterViewset, basename='register')
@@ -15,3 +17,5 @@ urlpatterns = [
     path('userdetails/', UserdataViewset.as_view(), name='userdetails'),
     path('admin/', admin.site.urls)
 ]
+
+urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
