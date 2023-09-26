@@ -12,13 +12,11 @@ def movie_post_save(sender, instance, created, **kwargs): # function call after 
     convert_videoformat(instance.file.path, '1080')
     if created:
         print('New video was just created')
-    print('existing video was saved')
+    else:
+        print('existing video was saved')
 
 
 @receiver(post_delete, sender=Movie)
 def video_post_delete(sender, instance, **kwargs):
     print('video was deleted')
-    
-# video hochgeladen --> post_save --> konvertieren
-# 
 
