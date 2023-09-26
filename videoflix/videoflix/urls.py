@@ -17,7 +17,8 @@ urlpatterns = [
     path('login/', LoginViewset.as_view(), name='login'),
     path('logout/', LogoutViewset.as_view(), name='logout'),
     path('userdetails/', UserdataViewset.as_view(), name='userdetails'),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

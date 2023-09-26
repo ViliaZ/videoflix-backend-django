@@ -27,9 +27,20 @@ SECRET_KEY = 'django-insecure-4tp-y6slcqwnv9swj3#9n=e5d=ax(6is2q0+m9x!5qvoey+u&n
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', 
+    'localhost',
     '127.0.0.1'
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "videoflix"
+    }
+}
 
 
 # Application definition
@@ -44,10 +55,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'content.apps.ContentConfig',
-    'users'
+    'users', 
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,6 +68,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+INTERNAL_IPS = [ # important for django-debug-toolbar
+    "127.0.0.1",
 ]
 
 ROOT_URLCONF = 'videoflix.urls'
@@ -85,10 +102,10 @@ WSGI_APPLICATION = 'videoflix.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'videoflix', 
+        'NAME': 'videoflix',
         'USER': 'postgres',
         'PASSWORD': 'postgres123',
-        'HOST': 'localhost', 
+        'HOST': 'localhost',
         'PORT': '5434',
     }
 }
