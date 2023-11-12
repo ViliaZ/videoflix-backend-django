@@ -16,3 +16,5 @@ def get_filename_converted_video(filename, target_format):
     splitted = filename.split('.')[0]  # cut original 'mp4' 
     new_filename = f'{splitted}_{target_format}p.mp4' # e.g. originalvideo_720p.mp4
     return new_filename
+
+print('task was completed with taskrunner')
