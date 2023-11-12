@@ -31,18 +31,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "PASSWORD": "foobared",
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": "videoflix"
-    }
-}
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,6 +45,9 @@ INSTALLED_APPS = [
     'content.apps.ContentConfig',
     'users', 
     'debug_toolbar',
+    'django_rq',
+    'import_export',
+    'django_extensions'  #  e.g. to run python scripts with command python manage.py runscript <name>
 ]
 
 MIDDLEWARE = [
@@ -70,7 +61,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-INTERNAL_IPS = [ # important for django-debug-toolbar
+# important for django-debug-toolbar
+INTERNAL_IPS = [ 
     "127.0.0.1",
 ]
 
@@ -93,23 +85,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'videoflix.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'videoflix',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres123',
-        'HOST': 'localhost',
-        'PORT': '5434',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -147,13 +122,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/staticfiles') # create or save in folder staticfiles
+
+# import / export library
+IMPORT_EXPORT_USE_TRANSACTIONS = True # imports or exports: all or nothing
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# for ffmpeg (Video Convertion, upload)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -166,4 +148,45 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+# postgres
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'videoflix',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres123',
+        'HOST': 'localhost',
+        'PORT': '5434',
+    }
+}
+
+# redis 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "PASSWORD": "foobared",
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "videoflix"
+    }
+}
+
 CACHE_TTL = 60 * 15  # redis caching 15 min
+
+# django-rq
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': 'foobared',
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
+
