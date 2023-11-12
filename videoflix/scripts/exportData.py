@@ -7,4 +7,4 @@ from content.admin import MovieResource
 # print(sys.path)
 
 def run():
-    print('Hello')
+    print('Test')
